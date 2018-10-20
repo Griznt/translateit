@@ -7,15 +7,8 @@ class TextBlockContainer extends React.Component {
       <div className="text-block">
         {this.props.loading ? <Loader className="loader" /> : null}
         {this.props.source.text ? (
-          <div
-            className={`source-text${
-              this.props.source.collapsed ? " collapsed" : ""
-            }`}
-          >
-            <div className="header" onClick={this.props.toggleSourceText}>
-              Source text
-            </div>
-            {/* @TODO: change to textarea */}
+          <div className="source-text">
+            <div className="header">Source text</div>
             <div className="content">
               {this.props.source.text.split("\n").map((item, key) => {
                 return (
@@ -30,28 +23,14 @@ class TextBlockContainer extends React.Component {
         {this.props.error ? (
           <div className="error">{this.props.error}</div>
         ) : this.props.target.text ? (
-          <div
-            className={`target-text${
-              this.props.source.collapsed ? " extended" : ""
-            }`}
-          >
+          <div className="target-text">
             <div className="header">Translated text</div>
-            <div
-              className={`content${
-                this.props.source.collapsed ? " extended" : ""
-              }`}
-            >
+            <div className="content">
               {this.props.target.text.map((item, key) => {
                 return (
                   <div className="sentence" key={key}>
                     <span className="source">{item.source}</span>
-                    <span
-                      className={`target${
-                        this.props.translateHighlighted ? " highlighted" : ""
-                      }`}
-                    >
-                      {item.target}
-                    </span>
+                    <span className="target">{item.target}</span>
                     <br />
                   </div>
                 );

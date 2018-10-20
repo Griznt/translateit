@@ -183,10 +183,6 @@ div.language__control:hover {
   margin: 0 0 10px;
   position: absolute;
 }
-.source-text.collapsed {
-  height: 0px;
-  overflow: hidden;
-}
 .source-text .content {
   max-height: 50%;
   padding: 0 10px;
