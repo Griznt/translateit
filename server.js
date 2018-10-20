@@ -1,11 +1,14 @@
+const axios = require("axios");
+const querystring = require("querystring");
+
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const SENTENCES_REGEXP = /((?!=|\.).)+(.)/g;
 
-require("dotenv").config();
+const DEEPL_API_URL = "https://api.deepl.com/v2/translate";
 
-const translate = require("yandex-translate")(process.env.YANDEX_API_KEY);
+require("dotenv").config();
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -36,6 +39,24 @@ app.post("/api/v1/translate", (request, response) => {
   }
 });
 
+const DEEPL_AUTH_KEY = process.env.DEEPL_AUTH_KEY;
+
+function translate(text, target_lang) {
+  return axios.post(
+    DEEPL_API_URL,
+    querystring.stringify({
+      auth_key: DEEPL_AUTH_KEY,
+      text,
+      target_lang
+    }),
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    }
+  );
+}
+
 function catchError({ error, response }) {
   console.error("catchError", { error });
   response
@@ -49,16 +70,6 @@ app.listen(port, err => {
   console.log(`server is listening on ${port}`);
 });
 
-function translateIt(text, { from, to }) {
-  return new Promise((resolve, reject) => {
-    translate.translate(text, { from, to }, (err, res) => {
-      if (err) reject(err);
-      else if (res.code === 200) resolve(res.text);
-      else reject(res);
-    });
-  });
-}
-
 function translateText({ textArray, from, to }) {
   return new Promise((resolve, reject) => {
     if (!textArray) reject("Bad Request params");
@@ -69,15 +80,13 @@ function translateText({ textArray, from, to }) {
       })
       .forEach((element, i) => {
         if (!element) reject("Bad Request params");
-        translateIt(element, {
-          from: from || "auto",
-          to: to || "en"
-        })
+        translate(element, to)
           .then(res => {
             results.push({
               i,
               source: element,
-              target: res[0]
+              target: res.data.translations[0].text,
+              sourceLang: res.data.translations[0].detected_source_language
             });
             if (results.length === textArray.length) resolve(results);
           })
