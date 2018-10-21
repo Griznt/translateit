@@ -153,13 +153,7 @@ class FileUploadContainer extends React.Component {
             isDisabled: !this.props.source.text || this.props.loading
           }}
           onSelect={this.props.onSelectTargetLanguage}
-        />
-        <ButtonContainer
-          className="translate"
-          onClick={this.props.translate}
-          disabled={!this.props.target.language || this.props.loading}
-          text="translateIt!"
-        />
+        />{" "}
         <div className="premium-switcher" onClick={this.props.togglePremium}>
           <span className="label">Premium service</span>
           <div className="checkbox">
@@ -171,60 +165,67 @@ class FileUploadContainer extends React.Component {
             <span />
           </div>
         </div>
-        <div
-          className={`premium-service${
-            this.props.premiumSelected ? "" : " closed"
-          }`}>
-          <div className="content-inner">
-            <div className="deadline">
-              <span className="deadline-header">Deadline</span>
-              <DatePicker
-                className="datepicker"
-                selected={this.props.deadline}
-                onChange={this.props.onDeadlineChange}
-                disabled={
-                  !this.props.premiumSelected ||
-                  !this.props.source.text ||
-                  this.props.loading
-                }
-                dateFormat="DD.MM.YYYY"
-                minDate={moment()}
-                // showTimeSelect
-              />
-            </div>
-            <div className="budget">
-              <span className="budget-header">Budget, EUR</span>
-              <div className="budget-input">
-                <NumberFormat
-                  value={this.props.budget}
-                  thousandSeparator={true}
-                  prefix={"€"}
+        {this.props.premiumSelected ? (
+          <div
+            className={`premium-service${
+              this.props.premiumSelected ? "" : " closed"
+            }`}>
+            <div className="content-inner">
+              <div className="deadline">
+                <span className="deadline-header">Deadline</span>
+                <DatePicker
+                  className="datepicker"
+                  selected={this.props.deadline}
+                  onChange={this.props.onDeadlineChange}
                   disabled={
                     !this.props.premiumSelected ||
                     !this.props.source.text ||
                     this.props.loading
                   }
-                  onValueChange={this.props.onBudgetChange}
-                  decimalScale={2}
+                  dateFormat="DD.MM.YYYY"
+                  minDate={moment()}
                 />
               </div>
+              <div className="budget">
+                <span className="budget-header">Budget, EUR</span>
+                <div className="budget-input">
+                  <NumberFormat
+                    value={this.props.budget}
+                    thousandSeparator={true}
+                    prefix={"€"}
+                    disabled={
+                      !this.props.premiumSelected ||
+                      !this.props.source.text ||
+                      this.props.loading
+                    }
+                    onValueChange={this.props.onBudgetChange}
+                    decimalScale={2}
+                  />
+                </div>
+              </div>
             </div>
+            <ButtonContainer
+              className="get-translate"
+              // onClick={this.props.saveResults}
+              disabled={!this.props.target.text || this.props.loading}
+              text="send to human"
+            />
           </div>
-        </div>
-        {this.props.premiumSelected ? (
-          <ButtonContainer
-            className="get-translate"
-            // onClick={this.props.saveResults}
-            disabled={!this.props.target.text || this.props.loading}
-            text="send to human"
-          />
         ) : (
-          <ButtonContainer
-            className="save"
-            onClick={this.props.saveResults}
-            disabled={!this.props.target.text || this.props.loading}
-            text="save results"
-          />
+          <div>
+            <ButtonContainer
+              className="translate"
+              onClick={this.props.translate}
+              disabled={!this.props.target.language || this.props.loading}
+              text="translateIt!"
+            />
+            <ButtonContainer
+              className="save"
+              onClick={this.props.saveResults}
+              disabled={!this.props.target.text || this.props.loading}
+              text="save results"
+            />{" "}
+          </div>
         )}
       </div>
     );
