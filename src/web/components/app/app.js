@@ -1,7 +1,6 @@
 import React from "react";
 
 import { translate as translateApi } from "../../axios/translate";
-import { LANGUAGES } from "../../const";
 import TextBlockContainer from "../text-block/text-block-container";
 import FileUploadContainer from "../file-upload-container/file-upload-container";
 import orderBy from "lodash/orderBy";
@@ -9,6 +8,7 @@ import { Parser } from "json2csv";
 import moment from "moment";
 import "../../css/main.css";
 
+import { LANGUAGES, ONE_WORD_PRICE } from "../../const";
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -86,6 +86,11 @@ class App extends React.Component {
 
   onTranslateSuccess(text) {
     this.clearError();
+
+    const wordsCount = text
+      .map(sentence => sentence.wordsCount)
+      .reduce((acc, next) => acc + next, 0);
+
     const sourceLang =
       this.getSourceLang(text.map(sentence => sentence.sourceLang)) ||
       this.state.target.language.value;
@@ -101,6 +106,11 @@ class App extends React.Component {
         language: { value: sourceLang, label: LANGUAGES.sourceLang }
       }
     });
+    this.billWordsCount(wordsCount);
+  }
+
+  billWordsCount(wordsCount) {
+    this.setState({ budget: ONE_WORD_PRICE * wordsCount });
   }
 
   translate() {
@@ -145,10 +155,8 @@ class App extends React.Component {
 
   onDeadlineChange(deadline) {
     if (deadline) this.setState({ deadline });
-    console.log({ deadline });
   }
   onBudgetChange({ formattedValue, value }) {
-    console.log({ formattedValue, value });
     if (formattedValue) this.setState({ budget: formattedValue });
   }
 

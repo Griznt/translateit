@@ -75,18 +75,24 @@ function translateText({ textArray, from, to }) {
     if (!textArray) reject("Bad Request params");
     const results = [];
     textArray
-      .map(element => {
-        return element.length > 0 ? element : "\r\n";
+      .map(sentence => {
+        return sentence.length > 0 ? sentence : "\r\n";
       })
-      .forEach((element, i) => {
-        if (!element) reject("Bad Request params");
-        translate(element, to)
+      .forEach((sentence, i) => {
+        if (!sentence) reject("Bad Request params");
+        translate(sentence, to)
           .then(res => {
             results.push({
               i,
-              source: element,
+              source: sentence,
               target: res.data.translations[0].text,
-              sourceLang: res.data.translations[0].detected_source_language
+              sourceLang: res.data.translations[0].detected_source_language,
+              wordsCount: sentence
+                .trim()
+                .split(" ")
+                .filter(word => word.match(/[\w\d]+/g))
+                .map(word => 1)
+                .reduce((acc, item) => acc + item, 0)
             });
             if (results.length === textArray.length) resolve(results);
           })

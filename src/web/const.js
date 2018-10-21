@@ -9,3 +9,4 @@ export const LANGUAGES = {
   NL: "Dutch",
   PL: "Polish"
 };
+export const ONE_WORD_PRICE = 0.1;

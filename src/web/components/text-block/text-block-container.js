@@ -14,7 +14,6 @@ class TextBlockContainer extends React.Component {
             <div className="header" onClick={this.props.toggleSourceText}>
               Source text
             </div>
-            {/* @TODO: change to textarea */}
             <div className="content">
               {this.props.source.text.split("\n").map((item, key) => {
                 return (
@@ -27,7 +26,7 @@ class TextBlockContainer extends React.Component {
           </div>
         ) : null}
         {this.props.error ? (
-          <div className="error">
+          <div className="translate error">
             {this.props.error.message || this.props.error.toString()}
           </div>
         ) : this.props.target.text ? (

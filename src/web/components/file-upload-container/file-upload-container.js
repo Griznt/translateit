@@ -105,7 +105,10 @@ class FileUploadContainer extends React.Component {
     return (
       <div className="sidebar-left">
         <div className="upload-file-zone">
-          <div className={`${this.props.className} error`}>
+          <div
+            className={`${
+              this.props.className ? this.props.className : ""
+            } error`}>
             {this.state.error
               ? this.state.error.message.split("\r\n").map((item, key) => {
                   return (
@@ -213,7 +216,7 @@ class FileUploadContainer extends React.Component {
             className="get-translate"
             // onClick={this.props.saveResults}
             disabled={!this.props.target.text || this.props.loading}
-            text="get best translate!"
+            text="send to human"
           />
         ) : (
           <ButtonContainer

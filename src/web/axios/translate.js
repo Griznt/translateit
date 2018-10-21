@@ -22,7 +22,6 @@ function makeApiRequest(data, authNeeded) {
   });
 }
 
-// Translate
 export function translate(data, onSuccess, onFailure) {
   makeApiRequest(data, false)
     .then(function(resp) {
