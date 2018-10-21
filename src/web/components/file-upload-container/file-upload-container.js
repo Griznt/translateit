@@ -200,14 +200,41 @@ class FileUploadContainer extends React.Component {
                     }
                     onValueChange={this.props.onBudgetChange}
                     decimalScale={2}
+                    isAllowed={({ floatValue }) =>
+                      floatValue >= 0 && floatValue <= 10002000
+                    }
+                    allowNegative={false}
                   />
                 </div>
               </div>
+              <div className="email-input">
+                <input
+                  className={`input${
+                    this.props.emailIsValid ? "" : " invalid"
+                  }`}
+                  type="email"
+                  placeholder="mail@example.com"
+                  value={this.props.userEmail}
+                  disabled={
+                    !this.props.premiumSelected ||
+                    !this.props.source.text ||
+                    this.props.loading
+                  }
+                  onChange={this.props.onUserEmailInput}
+                  // required
+                  // pattern={EMAIL_REGEXP}
+                />
+              </div>
             </div>
             <ButtonContainer
-              className="get-translate"
+              className="send-to-human"
               // onClick={this.props.saveResults}
-              disabled={!this.props.target.text || this.props.loading}
+              disabled={
+                !this.props.source.text ||
+                this.props.loading ||
+                !this.props.userEmail ||
+                !this.props.emailIsValid
+              }
               text="send to human"
             />
           </div>

@@ -86,13 +86,7 @@ function translateText({ textArray, from, to }) {
               i,
               source: sentence,
               target: res.data.translations[0].text,
-              sourceLang: res.data.translations[0].detected_source_language,
-              wordsCount: sentence
-                .trim()
-                .split(" ")
-                .filter(word => word.match(/[\w\d]+/g))
-                .map(word => 1)
-                .reduce((acc, item) => acc + item, 0)
+              sourceLang: res.data.translations[0].detected_source_language
             });
             if (results.length === textArray.length) resolve(results);
           })
@@ -102,6 +96,17 @@ function translateText({ textArray, from, to }) {
           });
       });
   });
+}
+
+function calculateWordsCount(sentence) {
+  return {
+    wordsCount: sentence
+      .trim()
+      .split(" ")
+      .filter(word => word.match(/[\w\d]+/g))
+      .map(word => 1)
+      .reduce((acc, item) => acc + item, 0)
+  };
 }
 
 function splitTextIntoSentences(text) {

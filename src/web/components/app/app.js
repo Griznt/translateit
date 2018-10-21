@@ -8,7 +8,7 @@ import { Parser } from "json2csv";
 import moment from "moment";
 import "../../css/main.css";
 
-import { LANGUAGES, ONE_WORD_PRICE } from "../../const";
+import { LANGUAGES, ONE_WORD_PRICE, EMAIL_REGEXP } from "../../const";
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +30,9 @@ class App extends React.Component {
       translateHighlighted: true,
       premiumSelected: false,
       deadline: moment(),
-      budget: "0.00"
+      budget: "0.00",
+      userEmail: "",
+      emailIsValid: false
     };
 
     this.onTextLoaded = this.onTextLoaded.bind(this);
@@ -46,6 +48,9 @@ class App extends React.Component {
     this.saveResults = this.saveResults.bind(this);
     this.onDeadlineChange = this.onDeadlineChange.bind(this);
     this.onBudgetChange = this.onBudgetChange.bind(this);
+    this.billWordsCount = this.billWordsCount.bind(this);
+    this.calculateWordsCount = this.calculateWordsCount.bind(this);
+    this.onUserEmailInput = this.onUserEmailInput.bind(this);
   }
 
   onTextLoaded({ text, filename, extension }) {
@@ -63,6 +68,7 @@ class App extends React.Component {
           text: null
         }
       });
+      this.calculateWordsCount(text);
     }
   }
 
@@ -87,10 +93,6 @@ class App extends React.Component {
   onTranslateSuccess(text) {
     this.clearError();
 
-    const wordsCount = text
-      .map(sentence => sentence.wordsCount)
-      .reduce((acc, next) => acc + next, 0);
-
     const sourceLang =
       this.getSourceLang(text.map(sentence => sentence.sourceLang)) ||
       this.state.target.language.value;
@@ -106,7 +108,6 @@ class App extends React.Component {
         language: { value: sourceLang, label: LANGUAGES.sourceLang }
       }
     });
-    this.billWordsCount(wordsCount);
   }
 
   billWordsCount(wordsCount) {
@@ -158,6 +159,22 @@ class App extends React.Component {
   }
   onBudgetChange({ formattedValue, value }) {
     if (formattedValue) this.setState({ budget: formattedValue });
+  }
+
+  calculateWordsCount(text) {
+    const wordsCount = text
+      .trim()
+      .split(" ")
+      .filter(word => word.match(/[\w\d]+/g))
+      .map(word => 1)
+      .reduce((acc, item) => acc + item, 0);
+    this.billWordsCount(wordsCount);
+  }
+
+  onUserEmailInput(event) {
+    const email = event.target.value;
+    if (email) this.setState({ userEmail: email });
+    this.setState({ emailIsValid: email.match(EMAIL_REGEXP) });
   }
 
   getParsedLanguages() {
@@ -230,6 +247,9 @@ class App extends React.Component {
           onDeadlineChange={this.onDeadlineChange}
           budget={this.state.budget}
           onBudgetChange={this.onBudgetChange}
+          userEmail={this.state.userEmail}
+          onUserEmailInput={this.onUserEmailInput}
+          emailIsValid={this.state.emailIsValid}
         />
         <TextBlockContainer
           loading={this.state.loading}

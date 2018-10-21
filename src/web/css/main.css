@@ -37,7 +37,7 @@ body {
 }
 .button {
   color: gray;
-  border-radius: 2px;
+  border-radius: 5px;
   margin: 10px;
   font-family: "Roboto";
   font-size: 16px;
@@ -285,10 +285,11 @@ span.dropzone__inner-text {
   margin-top: 10px;
 }
 .budget-input input {
+  font-family: "Roboto";
   font-size: 16px;
   padding: 10px 0;
   width: 180px;
-  border-radius: 2px;
+  border-radius: 5px;
   border: none;
   text-align: right;
   margin-top: 10px;
@@ -310,9 +311,10 @@ span.dropzone__inner-text {
   color: white;
 }
 .datepicker {
+  font-family: "Roboto";
   font-size: 16px;
   padding: 10px 0;
-  border-radius: 2px;
+  border-radius: 5px;
   border: none;
   width: 180px;
   text-align: right;
@@ -335,4 +337,31 @@ span.dropzone__inner-text {
 }
 .premium-service {
   transition: max-height 0.55s ease-in;
+}
+.email-input {
+  margin: 0 10px;
+}
+.email-input input {
+  font-family: "Roboto";
+  font-size: 16px;
+  padding: 10px 0;
+  width: 180px;
+  border-radius: 5px;
+  border: none;
+  text-align: right;
+  margin-top: 10px;
+  padding-right: 20px;
+}
+.email-input input:disabled {
+  background: rgb(204, 204, 204);
+  cursor: not-allowed;
+}
+.react-datepicker__input-container input:hover,
+.budget-input input:hover,
+.email-input input:hover {
+  background: #bfedff;
+}
+.email-input input.invalid {
+  color: rgb(216, 66, 66);
+  /* background: rgb(250, 201, 201); */
 }
