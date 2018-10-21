@@ -4,6 +4,11 @@ import FileInputContainer from "../input/file-input-container";
 import SelectContainer from "../select/select-container";
 import ButtonContainer from "../button/button-container";
 import { ACCEPTED_FILE_EXTENSIONS } from "../../const";
+import NumberFormat from "react-number-format";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 class FileUploadContainer extends React.Component {
   constructor(props) {
@@ -136,7 +141,6 @@ class FileUploadContainer extends React.Component {
             />
           </ReactDropzone>
         </div>
-
         <SelectContainer
           options={this.props.languages}
           className="language"
@@ -164,12 +168,61 @@ class FileUploadContainer extends React.Component {
             <span />
           </div>
         </div>
-        <ButtonContainer
-          className="save"
-          onClick={this.props.saveResults}
-          disabled={!this.props.target.text || this.props.loading}
-          text="save results"
-        />
+        <div
+          className={`premium-service${
+            this.props.premiumSelected ? "" : " closed"
+          }`}>
+          <div className="content-inner">
+            <div className="deadline">
+              <span className="deadline-header">Deadline</span>
+              <DatePicker
+                className="datepicker"
+                selected={this.props.deadline}
+                onChange={this.props.onDeadlineChange}
+                disabled={
+                  !this.props.premiumSelected ||
+                  !this.props.source.text ||
+                  this.props.loading
+                }
+                dateFormat="DD.MM.YYYY"
+                minDate={moment()}
+                // showTimeSelect
+              />
+            </div>
+            <div className="budget">
+              <span className="budget-header">Budget, EUR</span>
+              <div className="budget-input">
+                <NumberFormat
+                  value={this.props.budget}
+                  thousandSeparator={true}
+                  prefix={"€"}
+                  disabled={
+                    !this.props.premiumSelected ||
+                    !this.props.source.text ||
+                    this.props.loading
+                  }
+                  onValueChange={this.props.onBudgetChange}
+                  decimalScale={2}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        {this.props.premiumSelected ? (
+          <ButtonContainer
+            className="get-translate"
+            // onClick={this.props.saveResults}
+            disabled={!this.props.target.text || this.props.loading}
+            text="get best translate!"
+          />
+        ) : (
+          <ButtonContainer
+            className="save"
+            onClick={this.props.saveResults}
+            disabled={!this.props.target.text || this.props.loading}
+            text="save results"
+          />
+        )}
       </div>
     );
   }

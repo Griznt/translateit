@@ -6,7 +6,7 @@ import TextBlockContainer from "../text-block/text-block-container";
 import FileUploadContainer from "../file-upload-container/file-upload-container";
 import orderBy from "lodash/orderBy";
 import { Parser } from "json2csv";
-
+import moment from "moment";
 import "../../css/main.css";
 
 class App extends React.Component {
@@ -28,7 +28,9 @@ class App extends React.Component {
       loading: false,
       error: null,
       translateHighlighted: true,
-      premiumSelected: false
+      premiumSelected: false,
+      deadline: moment(),
+      budget: "0.00"
     };
 
     this.onTextLoaded = this.onTextLoaded.bind(this);
@@ -42,6 +44,8 @@ class App extends React.Component {
     this.togglePremium = this.togglePremium.bind(this);
     this.getParsedLanguages = this.getParsedLanguages.bind(this);
     this.saveResults = this.saveResults.bind(this);
+    this.onDeadlineChange = this.onDeadlineChange.bind(this);
+    this.onBudgetChange = this.onBudgetChange.bind(this);
   }
 
   onTextLoaded({ text, filename, extension }) {
@@ -139,6 +143,15 @@ class App extends React.Component {
     this.setState({ premiumSelected: !this.state.premiumSelected });
   }
 
+  onDeadlineChange(deadline) {
+    if (deadline) this.setState({ deadline });
+    console.log({ deadline });
+  }
+  onBudgetChange({ formattedValue, value }) {
+    console.log({ formattedValue, value });
+    if (formattedValue) this.setState({ budget: formattedValue });
+  }
+
   getParsedLanguages() {
     return Object.keys(LANGUAGES).map(key => {
       return { value: key, label: LANGUAGES[key] };
@@ -205,6 +218,10 @@ class App extends React.Component {
           togglePremium={this.togglePremium}
           premiumSelected={this.state.premiumSelected}
           saveResults={this.saveResults}
+          deadline={this.state.deadline}
+          onDeadlineChange={this.onDeadlineChange}
+          budget={this.state.budget}
+          onBudgetChange={this.onBudgetChange}
         />
         <TextBlockContainer
           loading={this.state.loading}

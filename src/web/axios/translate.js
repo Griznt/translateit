@@ -1,10 +1,16 @@
 import axios from "axios";
 import { TRANSLATE_API_URL } from "../const";
 
-// Abstract API request function
 function makeApiRequest(data, authNeeded) {
-  // Return response from API
-  return axios.post(TRANSLATE_API_URL, {
+  let url = "";
+  if (process.env.NODE_ENV === "development") {
+    const [host] = window.location.host.split(":") || [];
+    url = `${
+      process.env.HTTPS === "true" ? "https" : "http"
+    }://${host}:${process.env.HTTP || "3000"}${TRANSLATE_API_URL}`;
+  } else url = TRANSLATE_API_URL;
+
+  return axios.post(url, {
     text: data.source.text,
     // from: data.source.language.value,
     to: data.target.language.value,
