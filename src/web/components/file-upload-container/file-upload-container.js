@@ -123,8 +123,7 @@ class FileUploadContainer extends React.Component {
             acceptClassName="dropzone__accepted"
             rejectClassName="dropzone__rejected"
             disabledClassName="dropzone__disabled"
-            onDrop={this.onDrop}
-          >
+            onDrop={this.onDrop}>
             <span className="dropzone__inner-text">Drop text file here!</span>
             <FileInputContainer
               className="source-text-load"
@@ -142,19 +141,9 @@ class FileUploadContainer extends React.Component {
           options={this.props.languages}
           className="language"
           settings={{
-            placeholder: "source language",
-            isSearchable: true,
-            isDisabled: !this.props.source.text || this.props.loading
-          }}
-          onSelect={this.props.onSelectSourceLanguage}
-        />
-        <SelectContainer
-          options={this.props.languages}
-          className="language"
-          settings={{
             placeholder: "target language",
             isSearchable: true,
-            isDisabled: !this.props.source.language || this.props.loading
+            isDisabled: !this.props.source.text || this.props.loading
           }}
           onSelect={this.props.onSelectTargetLanguage}
         />
@@ -164,16 +153,13 @@ class FileUploadContainer extends React.Component {
           disabled={!this.props.target.language || this.props.loading}
           text="translateIt!"
         />
-        <div
-          className="highlight-switcher"
-          onClick={this.props.toggleHighlight}
-        >
-          <span className="label">Highlight translated sentences</span>
+        <div className="premium-switcher" onClick={this.props.togglePremium}>
+          <span className="label">Premium service</span>
           <div className="checkbox">
             <input
               type="checkbox"
-              checked={this.props.translateHighlighted}
-              onChange={this.props.toggleHighlight}
+              checked={this.props.premiumSelected}
+              onChange={this.props.togglePremium}
             />
             <span />
           </div>

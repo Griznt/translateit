@@ -5,14 +5,14 @@ import { TRANSLATE_API_URL } from "../const";
 function makeApiRequest(data, authNeeded) {
   // Return response from API
   return axios.post(TRANSLATE_API_URL, {
-      text: data.source.text,
-      from: data.source.language.value,
-      to: data.target.language.value,
-      dataType: "json",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      }
+    text: data.source.text,
+    // from: data.source.language.value,
+    to: data.target.language.value,
+    dataType: "json",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    }
   });
 }
 

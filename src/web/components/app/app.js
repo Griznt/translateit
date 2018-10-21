@@ -1,9 +1,11 @@
 import React from "react";
+
 import { translate as translateApi } from "../../axios/translate";
 import { LANGUAGES } from "../../const";
 import TextBlockContainer from "../text-block/text-block-container";
 import FileUploadContainer from "../file-upload-container/file-upload-container";
 import orderBy from "lodash/orderBy";
+import { Parser } from "json2csv";
 
 import "../../css/main.css";
 
@@ -25,7 +27,8 @@ class App extends React.Component {
       },
       loading: false,
       error: null,
-      translateHighlighted: true
+      translateHighlighted: true,
+      premiumSelected: false
     };
 
     this.onTextLoaded = this.onTextLoaded.bind(this);
@@ -36,7 +39,7 @@ class App extends React.Component {
     this.clearError = this.clearError.bind(this);
     this.onTranslateSuccess = this.onTranslateSuccess.bind(this);
     this.toggleSourceText = this.toggleSourceText.bind(this);
-    this.toggleHighlight = this.toggleHighlight.bind(this);
+    this.togglePremium = this.togglePremium.bind(this);
     this.getParsedLanguages = this.getParsedLanguages.bind(this);
     this.saveResults = this.saveResults.bind(this);
   }
@@ -69,15 +72,30 @@ class App extends React.Component {
     this.clearError();
   }
 
+  getSourceLang(text) {
+    return text
+      .filter(
+        lang => lang && lang !== "" && lang !== this.state.target.language.value
+      )
+      .reduce((acc, next) => acc);
+  }
+
   onTranslateSuccess(text) {
     this.clearError();
+    const sourceLang =
+      this.getSourceLang(text.map(sentence => sentence.sourceLang)) ||
+      this.state.target.language.value;
     this.setState({
       target: {
         ...this.state.target,
         text: orderBy(text, ["i"], ["asc"])
       },
       loading: false,
-      source: { ...this.state.source, collapsed: true }
+      source: {
+        ...this.state.source,
+        collapsed: true,
+        language: { value: sourceLang, label: LANGUAGES.sourceLang }
+      }
     });
   }
 
@@ -117,8 +135,8 @@ class App extends React.Component {
     });
   }
 
-  toggleHighlight() {
-    this.setState({ translateHighlighted: !this.state.translateHighlighted });
+  togglePremium() {
+    this.setState({ premiumSelected: !this.state.premiumSelected });
   }
 
   getParsedLanguages() {
@@ -127,21 +145,47 @@ class App extends React.Component {
     });
   }
 
+  saveToCSV(arrayofObjects) {
+    try {
+      const fields = Object.keys(arrayofObjects[0]);
+      const parser = new Parser({ fields });
+      const csvFile = parser.parse(arrayofObjects);
+
+      return csvFile;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  downloadCsv(csv, filename) {
+    const hiddenElement = document.createElement("a");
+    hiddenElement.href =
+      "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+    hiddenElement.target = "_blank";
+    hiddenElement.download = `${filename}.csv`;
+    hiddenElement.click();
+  }
+
   saveResults() {
-    const element = document.createElement("a");
-    const fileToDownload = this.state.target.text.map(sentence => {
-      return `${sentence.source}\r\n${sentence.target}\r\n\r\n`;
+    const from = this.state.source.language.value,
+      to = this.state.target.language.value;
+    const jsonArray = [];
+    this.state.target.text.forEach(sentence => {
+      const json = {};
+      json[from] = sentence.source;
+      json[to] = sentence.target;
+      jsonArray.push(json);
     });
-    const file = new Blob(fileToDownload, {
-      type: "text/plain"
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = `${this.state.source.filename}_${
-      this.state.source.language.value
-    }_to_${this.state.target.language.value}.${
-      this.state.source.extension ? this.state.source.extension : ""
-    }`;
-    element.click();
+
+    let csvDocument = null;
+    try {
+      csvDocument = this.saveToCSV(jsonArray);
+    } catch (err) {
+      console.error(err);
+    }
+
+    this.downloadCsv(csvDocument, `${from}_to_${to}`);
   }
 
   render() {
@@ -158,8 +202,8 @@ class App extends React.Component {
           onSelectTargetLanguage={this.onSelectTargetLanguage}
           translate={this.translate}
           target={this.state.target}
-          toggleHighlight={this.toggleHighlight}
-          translateHighlighted={this.state.translateHighlighted}
+          togglePremium={this.togglePremium}
+          premiumSelected={this.state.premiumSelected}
           saveResults={this.saveResults}
         />
         <TextBlockContainer
