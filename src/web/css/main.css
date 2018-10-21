@@ -365,3 +365,6 @@ span.dropzone__inner-text {
   color: rgb(216, 66, 66);
   /* background: rgb(250, 201, 201); */
 }
+.button.send-to-human:hover {
+  background: #bfedff;
+}
