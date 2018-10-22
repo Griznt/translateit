@@ -9,6 +9,7 @@ import moment from "moment";
 import "../../css/main.css";
 
 import { LANGUAGES, ONE_WORD_PRICE, EMAIL_REGEXP } from "../../const";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -83,19 +84,20 @@ class App extends React.Component {
   }
 
   getSourceLang(text) {
-    return text
-      .filter(
+    return new Set(
+      text.filter(
         lang => lang && lang !== "" && lang !== this.state.target.language.value
       )
-      .reduce((acc, next) => acc);
+    );
   }
 
   onTranslateSuccess(text) {
     this.clearError();
 
-    const sourceLang =
-      this.getSourceLang(text.map(sentence => sentence.sourceLang)) ||
-      this.state.target.language.value;
+    let [sourceLang] = this.getSourceLang(
+      text.map(sentence => sentence.sourceLang)
+    );
+    if (!sourceLang) sourceLang = this.state.target.language.value;
     this.setState({
       target: {
         ...this.state.target,
@@ -166,7 +168,7 @@ class App extends React.Component {
       .trim()
       .split(" ")
       .filter(word => word.match(/[\w\d]+/g))
-      .map(word => 1)
+      .map(() => 1)
       .reduce((acc, item) => acc + item, 0);
     this.billWordsCount(wordsCount);
   }
