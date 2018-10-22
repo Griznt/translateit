@@ -37,8 +37,10 @@ body {
 }
 .button {
   color: gray;
-  border-radius: 2px;
+  border-radius: 5px;
   margin: 10px;
+  font-family: "Roboto";
+  font-size: 16px;
 }
 button {
   display: inline-block;
@@ -52,13 +54,13 @@ button {
   color: steelblue;
   cursor: pointer;
   text-align: center;
+  font-size: 16px;
   transition: background 250ms ease-in-out, transform 150ms ease;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
 
-button:hover,
-button:focus {
+button:hover button:focus {
   background: #bfedff;
 }
 
@@ -111,6 +113,7 @@ div.language__control:hover {
   white-space: nowrap;
 }
 .file-upload__input {
+  color: white;
   position: absolute;
   left: 0;
   top: 0;
@@ -122,7 +125,7 @@ div.language__control:hover {
   height: 37px;
   opacity: 0;
 }
-.highlight-switcher {
+.premium-switcher {
   color: white;
   padding: 0 10px;
   display: flex;
@@ -150,7 +153,7 @@ div.language__control:hover {
 .checkbox input[type="checkbox"] + span {
   margin-right: 4px;
 }
-.highlight-switcher .label {
+.premium-switcher .label {
   font-size: 16px;
   width: 80%;
 }
@@ -241,11 +244,16 @@ div.language__control:hover {
   color: steelblue;
 }
 .error {
-  color: red;
+  color: rgb(255, 77, 77);
+}
+.translate.error {
+  margin: 20px;
 }
 .upload-file-zone .error {
-  margin: 10px 25%;
+  margin: 10px;
   height: 17px;
+  font-size: 14px;
+  text-align: center;
 }
 .dropzone {
   width: 220px;
@@ -265,8 +273,98 @@ span.dropzone__inner-text {
   position: absolute;
   margin: 8% 20%;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
 }
 .dropzone.dropzone__active .file-upload {
   opacity: 0;
+}
+
+.budget {
+  width: 200px;
+  padding: 0 10px;
+  margin-top: 10px;
+}
+.budget-input input {
+  font-family: "Roboto";
+  font-size: 16px;
+  padding: 10px 0;
+  width: 180px;
+  border-radius: 5px;
+  border: none;
+  text-align: right;
+  margin-top: 10px;
+  padding-right: 20px;
+}
+.budget-input input:disabled {
+  background: rgb(204, 204, 204);
+  cursor: not-allowed;
+}
+.budget-header {
+  color: white;
+}
+.deadline {
+  margin-top: 10px;
+  width: 180px;
+  padding: 0 10px;
+}
+.deadline-header {
+  color: white;
+}
+.datepicker {
+  font-family: "Roboto";
+  font-size: 16px;
+  padding: 10px 0;
+  border-radius: 5px;
+  border: none;
+  width: 180px;
+  text-align: right;
+  margin-right: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.react-datepicker__input-container input {
+  padding-right: 20px;
+}
+.react-datepicker__input-container input:disabled {
+  background: rgb(204, 204, 204);
+  cursor: not-allowed;
+}
+
+.premium-service.closed {
+  display: none;
+  overflow: hidden;
+  transition: display 0.55s ease-in-out;
+}
+.premium-service {
+  transition: max-height 0.55s ease-in;
+}
+.email-input {
+  margin: 0 10px;
+}
+.email-input input {
+  font-family: "Roboto";
+  font-size: 16px;
+  padding: 10px 0;
+  width: 180px;
+  border-radius: 5px;
+  border: none;
+  text-align: right;
+  margin-top: 10px;
+  padding-right: 20px;
+}
+.email-input input:disabled {
+  background: rgb(204, 204, 204);
+  cursor: not-allowed;
+}
+.react-datepicker__input-container input:hover,
+.budget-input input:hover,
+.email-input input:hover {
+  background: #bfedff;
+}
+.email-input input.invalid {
+  color: rgb(216, 66, 66);
+  /* background: rgb(250, 201, 201); */
+}
+.button.send-to-human:hover {
+  background: #bfedff;
 }

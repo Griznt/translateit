@@ -4,6 +4,11 @@ import FileInputContainer from "../input/file-input-container";
 import SelectContainer from "../select/select-container";
 import ButtonContainer from "../button/button-container";
 import { ACCEPTED_FILE_EXTENSIONS } from "../../const";
+import NumberFormat from "react-number-format";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 class FileUploadContainer extends React.Component {
   constructor(props) {
@@ -100,7 +105,10 @@ class FileUploadContainer extends React.Component {
     return (
       <div className="sidebar-left">
         <div className="upload-file-zone">
-          <div className={`${this.props.className} error`}>
+          <div
+            className={`${
+              this.props.className ? this.props.className : ""
+            } error`}>
             {this.state.error
               ? this.state.error.message.split("\r\n").map((item, key) => {
                   return (
@@ -123,8 +131,7 @@ class FileUploadContainer extends React.Component {
             acceptClassName="dropzone__accepted"
             rejectClassName="dropzone__rejected"
             disabledClassName="dropzone__disabled"
-            onDrop={this.onDrop}
-          >
+            onDrop={this.onDrop}>
             <span className="dropzone__inner-text">Drop text file here!</span>
             <FileInputContainer
               className="source-text-load"
@@ -137,53 +144,116 @@ class FileUploadContainer extends React.Component {
             />
           </ReactDropzone>
         </div>
-
-        <SelectContainer
-          options={this.props.languages}
-          className="language"
-          settings={{
-            placeholder: "source language",
-            isSearchable: true,
-            isDisabled: !this.props.source.text || this.props.loading
-          }}
-          onSelect={this.props.onSelectSourceLanguage}
-        />
         <SelectContainer
           options={this.props.languages}
           className="language"
           settings={{
             placeholder: "target language",
             isSearchable: true,
-            isDisabled: !this.props.source.language || this.props.loading
+            isDisabled: !this.props.source.text || this.props.loading
           }}
           onSelect={this.props.onSelectTargetLanguage}
-        />
-        <ButtonContainer
-          className="translate"
-          onClick={this.props.translate}
-          disabled={!this.props.target.language || this.props.loading}
-          text="translateIt!"
-        />
-        <div
-          className="highlight-switcher"
-          onClick={this.props.toggleHighlight}
-        >
-          <span className="label">Highlight translated sentences</span>
+        />{" "}
+        <div className="premium-switcher" onClick={this.props.togglePremium}>
+          <span className="label">Premium service</span>
           <div className="checkbox">
             <input
               type="checkbox"
-              checked={this.props.translateHighlighted}
-              onChange={this.props.toggleHighlight}
+              checked={this.props.premiumSelected}
+              onChange={this.props.togglePremium}
             />
             <span />
           </div>
         </div>
-        <ButtonContainer
-          className="save"
-          onClick={this.props.saveResults}
-          disabled={!this.props.target.text || this.props.loading}
-          text="save results"
-        />
+        {this.props.premiumSelected ? (
+          <div
+            className={`premium-service${
+              this.props.premiumSelected ? "" : " closed"
+            }`}>
+            <div className="content-inner">
+              <div className="deadline">
+                <span className="deadline-header">Deadline</span>
+                <DatePicker
+                  className="datepicker"
+                  selected={this.props.deadline}
+                  onChange={this.props.onDeadlineChange}
+                  disabled={
+                    !this.props.premiumSelected ||
+                    !this.props.source.text ||
+                    this.props.loading
+                  }
+                  dateFormat="DD.MM.YYYY"
+                  minDate={moment()}
+                />
+              </div>
+              <div className="budget">
+                <span className="budget-header">Budget, EUR</span>
+                <div className="budget-input">
+                  <NumberFormat
+                    value={this.props.budget}
+                    thousandSeparator={true}
+                    prefix={"€"}
+                    disabled={
+                      !this.props.premiumSelected ||
+                      !this.props.source.text ||
+                      this.props.loading
+                    }
+                    onValueChange={this.props.onBudgetChange}
+                    decimalScale={2}
+                    isAllowed={({ floatValue }) =>
+                      floatValue >= 0 && floatValue <= 10002000
+                    }
+                    allowNegative={false}
+                  />
+                </div>
+              </div>
+              <div className="email-input">
+                <input
+                  className={`input${
+                    this.props.emailIsValid ? "" : " invalid"
+                  }`}
+                  type="email"
+                  placeholder="mail@example.com"
+                  value={this.props.userEmail}
+                  disabled={
+                    !this.props.premiumSelected ||
+                    !this.props.source.text ||
+                    this.props.loading
+                  }
+                  onChange={this.props.onUserEmailInput}
+                  // required
+                  // pattern={EMAIL_REGEXP}
+                />
+              </div>
+            </div>
+            <ButtonContainer
+              className="send-to-human"
+              // onClick={this.props.saveResults}
+              disabled={
+                !this.props.source.text ||
+                this.props.loading ||
+                !this.props.userEmail ||
+                !this.props.emailIsValid
+              }
+              text="send to human"
+            />
+          </div>
+        ) : (
+          <div>
+            <ButtonContainer
+              className="translate"
+              onClick={this.props.translate}
+              disabled={!this.props.target.language || this.props.loading}
+              text="translateIt!"
+            />
+            <ButtonContainer
+              className="save"
+              onClick={this.props.saveResults}
+              disabled={!this.props.target.text || this.props.loading}
+              text="save results"
+            />{" "}
+          </div>
+        )}
       </div>
     );
   }

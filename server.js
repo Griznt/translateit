@@ -1,13 +1,16 @@
+const axios = require("axios");
+const querystring = require("querystring");
+
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const SENTENCES_REGEXP = /((?!=|\.).)+(.)/g;
 
+const DEEPL_API_URL = "https://api.deepl.com/v2/translate";
+
 require("dotenv").config();
 
-const translate = require("yandex-translate")(process.env.YANDEX_API_KEY);
-
-const port = process.env.PORT || 3000;
+const port = process.env.HTTP_PORT || 3000;
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -36,6 +39,24 @@ app.post("/api/v1/translate", (request, response) => {
   }
 });
 
+const DEEPL_AUTH_KEY = process.env.DEEPL_AUTH_KEY;
+
+function translate(text, target_lang) {
+  return axios.post(
+    DEEPL_API_URL,
+    querystring.stringify({
+      auth_key: DEEPL_AUTH_KEY,
+      text,
+      target_lang
+    }),
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    }
+  );
+}
+
 function catchError({ error, response }) {
   console.error("catchError", { error });
   response
@@ -49,35 +70,23 @@ app.listen(port, err => {
   console.log(`server is listening on ${port}`);
 });
 
-function translateIt(text, { from, to }) {
-  return new Promise((resolve, reject) => {
-    translate.translate(text, { from, to }, (err, res) => {
-      if (err) reject(err);
-      else if (res.code === 200) resolve(res.text);
-      else reject(res);
-    });
-  });
-}
-
 function translateText({ textArray, from, to }) {
   return new Promise((resolve, reject) => {
     if (!textArray) reject("Bad Request params");
     const results = [];
     textArray
-      .map(element => {
-        return element.length > 0 ? element : "\r\n";
+      .map(sentence => {
+        return sentence.length > 0 ? sentence : "\r\n";
       })
-      .forEach((element, i) => {
-        if (!element) reject("Bad Request params");
-        translateIt(element, {
-          from: from || "auto",
-          to: to || "en"
-        })
+      .forEach((sentence, i) => {
+        if (!sentence) reject("Bad Request params");
+        translate(sentence, to)
           .then(res => {
             results.push({
               i,
-              source: element,
-              target: res[0]
+              source: sentence,
+              target: res.data.translations[0].text,
+              sourceLang: res.data.translations[0].detected_source_language
             });
             if (results.length === textArray.length) resolve(results);
           })
@@ -87,6 +96,17 @@ function translateText({ textArray, from, to }) {
           });
       });
   });
+}
+
+function calculateWordsCount(sentence) {
+  return {
+    wordsCount: sentence
+      .trim()
+      .split(" ")
+      .filter(word => word.match(/[\w\d]+/g))
+      .map(word => 1)
+      .reduce((acc, item) => acc + item, 0)
+  };
 }
 
 function splitTextIntoSentences(text) {
