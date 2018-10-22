@@ -2,6 +2,9 @@
 
 ### .env
 
+DEEPL_AUTH_KEY=
+PORT=
+
 ### running
 
 `npm start` for local-starting web part of app
