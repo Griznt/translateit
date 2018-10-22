@@ -123,8 +123,7 @@ class FileUploadContainer extends React.Component {
             acceptClassName="dropzone__accepted"
             rejectClassName="dropzone__rejected"
             disabledClassName="dropzone__disabled"
-            onDrop={this.onDrop}
-          >
+            onDrop={this.onDrop}>
             <span className="dropzone__inner-text">Drop text file here!</span>
             <FileInputContainer
               className="source-text-load"
@@ -163,26 +162,6 @@ class FileUploadContainer extends React.Component {
           onClick={this.props.translate}
           disabled={!this.props.target.language || this.props.loading}
           text="translateIt!"
-        />
-        <div
-          className="highlight-switcher"
-          onClick={this.props.toggleHighlight}
-        >
-          <span className="label">Highlight translated sentences</span>
-          <div className="checkbox">
-            <input
-              type="checkbox"
-              checked={this.props.translateHighlighted}
-              onChange={this.props.toggleHighlight}
-            />
-            <span />
-          </div>
-        </div>
-        <ButtonContainer
-          className="save"
-          onClick={this.props.saveResults}
-          disabled={!this.props.target.text || this.props.loading}
-          text="save results"
         />
       </div>
     );
