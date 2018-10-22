@@ -219,6 +219,7 @@ class FileUploadContainer extends React.Component {
                 invalid={!this.props.emailIsValid}
                 onDelay={this.props.onUserEmailInput}
                 delay={500}
+                placeholder="mail@example.com"
               />
             </div>
             <ButtonContainer

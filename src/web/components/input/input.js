@@ -54,6 +54,7 @@ class Input extends React.Component {
           onBlur={this.onBlur}
           accept={this.props.accept}
           disabled={this.props.disabled}
+          placeholder={this.props.placeholder}
         />
       </div>
     );
