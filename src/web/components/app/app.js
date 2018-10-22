@@ -173,10 +173,9 @@ class App extends React.Component {
     this.billWordsCount(wordsCount);
   }
 
-  onUserEmailInput(event) {
-    const email = event.target.value;
-    if (email) this.setState({ userEmail: email });
-    this.setState({ emailIsValid: email.match(EMAIL_REGEXP) });
+  onUserEmailInput(userEmail) {
+    this.setState({ userEmail });
+    this.setState({ emailIsValid: !!userEmail.match(EMAIL_REGEXP) });
   }
 
   getParsedLanguages() {
@@ -201,7 +200,7 @@ class App extends React.Component {
   downloadCsv(csv, filename) {
     const hiddenElement = document.createElement("a");
     hiddenElement.href =
-      "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+      "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURIComponent(csv);
     hiddenElement.target = "_blank";
     hiddenElement.download = `${filename}.csv`;
     hiddenElement.click();

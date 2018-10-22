@@ -9,6 +9,7 @@ import NumberFormat from "react-number-format";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import Input from "../input/input";
 
 class FileUploadContainer extends React.Component {
   constructor(props) {
@@ -207,24 +208,18 @@ class FileUploadContainer extends React.Component {
                   />
                 </div>
               </div>
-              <div className="email-input">
-                <input
-                  className={`input${
-                    this.props.emailIsValid ? "" : " invalid"
-                  }`}
-                  type="email"
-                  placeholder="mail@example.com"
-                  value={this.props.userEmail}
-                  disabled={
-                    !this.props.premiumSelected ||
-                    !this.props.source.text ||
-                    this.props.loading
-                  }
-                  onChange={this.props.onUserEmailInput}
-                  // required
-                  // pattern={EMAIL_REGEXP}
-                />
-              </div>
+              <Input
+                className="email"
+                disabled={
+                  !this.props.premiumSelected ||
+                  !this.props.source.text ||
+                  this.props.loading
+                }
+                // onBlur={this.props.onUserEmailInput}
+                invalid={!this.props.emailIsValid}
+                onDelay={this.props.onUserEmailInput}
+                delay={500}
+              />
             </div>
             <ButtonContainer
               className="send-to-human"
