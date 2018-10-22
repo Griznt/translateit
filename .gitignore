@@ -22,7 +22,7 @@ yarn-error.log*
 
 #vscode
 /build
-/scripts
+# /scripts
 
 #env
 .env
