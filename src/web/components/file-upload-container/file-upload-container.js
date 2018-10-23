@@ -156,7 +156,7 @@ class FileUploadContainer extends React.Component {
             isDisabled: !this.props.source.text || this.props.loading
           }}
           onSelect={this.props.onSelectTargetLanguage}
-        />{" "}
+        />
         <div className="premium-switcher" onClick={this.props.togglePremium}>
           <span className="label">Premium service</span>
           <div className="checkbox">
@@ -177,7 +177,6 @@ class FileUploadContainer extends React.Component {
             <div className="content-inner">
               <div className="deadline">
                 <span className="deadline-header">Deadline</span>
-
                 <DatePicker
                   className="datepicker"
                   selected={this.props.deadline}
@@ -202,13 +201,16 @@ class FileUploadContainer extends React.Component {
                 </span>
                 <div className="budget-input">
                   <NumberFormat
-                    thousandSeparator={true}
-                    prefix={"€"}
-                    disabled={
+                    className={`budget-input span${
                       !this.props.premiumSelected ||
                       !this.props.source.text ||
                       this.props.loading
-                    }
+                        ? " disabled"
+                        : ""
+                    }`}
+                    displayType="text"
+                    thousandSeparator={true}
+                    prefix={"€"}
                     value={this.props.budget.value}
                     onValueChange={this.props.onBudgetChange}
                     decimalScale={2}

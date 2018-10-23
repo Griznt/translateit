@@ -64,6 +64,7 @@ class App extends React.Component {
     this.calculateWordsCount = this.calculateWordsCount.bind(this);
     this.onUserEmailInput = this.onUserEmailInput.bind(this);
     this.changeView = this.changeView.bind(this);
+    this.formatDeadline = this.formatDeadline.bind(this);
   }
 
   onTextLoaded({ text, filename, extension }) {
@@ -177,10 +178,14 @@ class App extends React.Component {
     this.setState({ premiumSelected: !this.state.premiumSelected });
   }
 
+  formatDeadline(deadlineValue) {
+    return deadlineValue === this.state.deadline;
+  }
+
   onDeadlineChange(deadline) {
     if (deadline) this.setState({ deadline });
   }
-  onBudgetChange({ formattedValue, value }) {
+  onBudgetChange({ value }) {
     if (value)
       this.setState({
         budget: { ...this.state.budget, value }
@@ -277,6 +282,7 @@ class App extends React.Component {
           emailIsValid={this.state.emailIsValid}
           changeView={this.changeView}
           previewAlternative={this.state.previewAlternative}
+          formatDeadline={this.formatDeadline}
         />
         <TextBlockContainer
           loading={this.state.loading}

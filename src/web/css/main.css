@@ -284,7 +284,7 @@ span.dropzone__inner-text {
   padding: 0 10px;
   margin-top: 10px;
 }
-.budget-input input {
+.budget-input span {
   font-family: "Roboto";
   font-size: 16px;
   padding: 10px 0;
@@ -294,9 +294,13 @@ span.dropzone__inner-text {
   text-align: right;
   margin-top: 10px;
   padding-right: 20px;
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+  background-color: white;
+  background-color: -moz-field;
 }
-.budget-input input:disabled {
-  background: rgb(204, 204, 204);
+.budget-input span.disabled {
+  background-color: rgb(204, 204, 204);
   cursor: not-allowed;
 }
 .budget-header {
