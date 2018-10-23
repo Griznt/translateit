@@ -24,7 +24,7 @@ body {
   display: inline-block;
 }
 .text-block {
-  margin: 0 5%;
+  margin: 0 50px;
   padding: 10px 10px;
   width: 70%;
   display: inline-table;
@@ -392,4 +392,7 @@ span.dropzone__inner-text {
 .alternative-text-table {
   border-spacing: 20px;
   text-align: justify;
+}
+.alternative-text-table td {
+  width: 50%;
 }
