@@ -1,7 +1,6 @@
 import React from "react";
 
 const alternativeView = props => {
-  console.log({ props });
   return (
     <div className="alternative-text">
       <table className="alternative-text-table">

@@ -8,7 +8,12 @@ import { Parser } from "json2csv";
 import moment from "moment";
 import "../../css/main.css";
 
-import { LANGUAGES, ONE_WORD_PRICE, EMAIL_REGEXP } from "../../const";
+import {
+  LANGUAGES,
+  ONE_WORD_PRICE,
+  EMAIL_REGEXP,
+  START_PRICE
+} from "../../const";
 
 class App extends React.Component {
   constructor(props) {
@@ -34,8 +39,8 @@ class App extends React.Component {
         .add(1, "day")
         .endOf("day"),
       budget: {
-        value: 0,
-        formattedValue: "0.00"
+        value: START_PRICE,
+        minValue: START_PRICE
       },
       userEmail: "",
       emailIsValid: false,
@@ -126,8 +131,8 @@ class App extends React.Component {
   billWordsCount(wordsCount) {
     this.setState({
       budget: {
-        value: ONE_WORD_PRICE * wordsCount,
-        formattedValue: ONE_WORD_PRICE * wordsCount
+        value: START_PRICE + ONE_WORD_PRICE * wordsCount,
+        minValue: START_PRICE + ONE_WORD_PRICE * wordsCount
       }
     });
   }
@@ -176,9 +181,9 @@ class App extends React.Component {
     if (deadline) this.setState({ deadline });
   }
   onBudgetChange({ formattedValue, value }) {
-    if (formattedValue)
+    if (value)
       this.setState({
-        budget: { ...this.state.budget, formattedValue }
+        budget: { ...this.state.budget, value }
       });
   }
 

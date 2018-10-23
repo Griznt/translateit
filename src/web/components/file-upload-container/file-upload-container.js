@@ -202,7 +202,6 @@ class FileUploadContainer extends React.Component {
                 </span>
                 <div className="budget-input">
                   <NumberFormat
-                    value={this.props.budget.formattedValue}
                     thousandSeparator={true}
                     prefix={"€"}
                     disabled={
@@ -210,18 +209,14 @@ class FileUploadContainer extends React.Component {
                       !this.props.source.text ||
                       this.props.loading
                     }
+                    value={this.props.budget.value}
                     onValueChange={this.props.onBudgetChange}
                     decimalScale={2}
-                    isAllowed={({ floatValue }) => {
-                      console.log({
-                        floatValue,
-                        "this.props.budget.value": this.props.budget.value
-                      });
-                      return (
-                        floatValue >= this.props.budget.value &&
-                        floatValue <= 10002000
-                      );
-                    }}
+                    fixedDecimalScale={true}
+                    isAllowed={({ floatValue }) =>
+                      floatValue >= this.props.budget.minValue &&
+                      floatValue <= 10002000
+                    }
                     allowNegative={false}
                   />
                 </div>
@@ -233,7 +228,6 @@ class FileUploadContainer extends React.Component {
                   !this.props.source.text ||
                   this.props.loading
                 }
-                // onBlur={this.props.onUserEmailInput}
                 invalid={!this.props.emailIsValid}
                 onDelay={this.props.onUserEmailInput}
                 delay={500}
