@@ -37,7 +37,8 @@ class App extends React.Component {
       premiumSelected: false,
       deadline: moment()
         .add(1, "day")
-        .endOf("day"),
+        .startOf("day")
+        .add(17, "hour"),
       budget: {
         value: START_PRICE,
         minValue: START_PRICE

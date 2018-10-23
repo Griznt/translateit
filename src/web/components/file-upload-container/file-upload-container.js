@@ -185,11 +185,11 @@ class FileUploadContainer extends React.Component {
                   }
                   startDate={moment()
                     .add(1, "day")
-                    .endOf("day")}
-                  dateFormat="ll"
+                    .startOf("day")}
+                  dateFormat="lll"
                   minDate={moment()
                     .add(1, "day")
-                    .endOf("day")}
+                    .startOf("day")}
                   timeCaption="time"
                   showTimeSelect={true}
                   minTime={moment()
