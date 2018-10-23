@@ -109,8 +109,7 @@ class FileUploadContainer extends React.Component {
           <div
             className={`${
               this.props.className ? this.props.className : ""
-            } error`}
-          >
+            } error`}>
             {this.state.error
               ? this.state.error.message.split("\r\n").map((item, key) => {
                   return (
@@ -133,8 +132,7 @@ class FileUploadContainer extends React.Component {
             acceptClassName="dropzone__accepted"
             rejectClassName="dropzone__rejected"
             disabledClassName="dropzone__disabled"
-            onDrop={this.onDrop}
-          >
+            onDrop={this.onDrop}>
             <span className="dropzone__inner-text">Drop text file here!</span>
             <FileInputContainer
               className="source-text-load"
@@ -172,8 +170,7 @@ class FileUploadContainer extends React.Component {
           <div
             className={`premium-service${
               this.props.premiumSelected ? "" : " closed"
-            }`}
-          >
+            }`}>
             <div className="content-inner">
               <div className="deadline">
                 <span className="deadline-header">Deadline</span>
@@ -189,10 +186,19 @@ class FileUploadContainer extends React.Component {
                   startDate={moment()
                     .add(1, "day")
                     .endOf("day")}
-                  dateFormat="DD.MM.YYYY"
+                  dateFormat="ll"
                   minDate={moment()
                     .add(1, "day")
                     .endOf("day")}
+                  timeCaption="time"
+                  showTimeSelect={true}
+                  minTime={moment()
+                    .hours(9)
+                    .minutes(0)}
+                  maxTime={moment()
+                    .hours(17)
+                    .minutes(0)}
+                  timeIntervals={60}
                 />
               </div>
               <div className="budget">
