@@ -30,10 +30,16 @@ class App extends React.Component {
       error: null,
       translateHighlighted: true,
       premiumSelected: false,
-      deadline: moment(),
-      budget: "0.00",
+      deadline: moment()
+        .add(1, "day")
+        .endOf("day"),
+      budget: {
+        value: 0,
+        formattedValue: "0.00"
+      },
       userEmail: "",
-      emailIsValid: false
+      emailIsValid: false,
+      previewAlternative: true
     };
 
     this.onTextLoaded = this.onTextLoaded.bind(this);
@@ -52,6 +58,7 @@ class App extends React.Component {
     this.billWordsCount = this.billWordsCount.bind(this);
     this.calculateWordsCount = this.calculateWordsCount.bind(this);
     this.onUserEmailInput = this.onUserEmailInput.bind(this);
+    this.changeView = this.changeView.bind(this);
   }
 
   onTextLoaded({ text, filename, extension }) {
@@ -112,8 +119,17 @@ class App extends React.Component {
     });
   }
 
+  changeView() {
+    this.setState({ previewAlternative: !this.state.previewAlternative });
+  }
+
   billWordsCount(wordsCount) {
-    this.setState({ budget: ONE_WORD_PRICE * wordsCount });
+    this.setState({
+      budget: {
+        value: ONE_WORD_PRICE * wordsCount,
+        formattedValue: ONE_WORD_PRICE * wordsCount
+      }
+    });
   }
 
   translate() {
@@ -160,7 +176,10 @@ class App extends React.Component {
     if (deadline) this.setState({ deadline });
   }
   onBudgetChange({ formattedValue, value }) {
-    if (formattedValue) this.setState({ budget: formattedValue });
+    if (formattedValue)
+      this.setState({
+        budget: { ...this.state.budget, formattedValue }
+      });
   }
 
   calculateWordsCount(text) {
@@ -251,6 +270,8 @@ class App extends React.Component {
           userEmail={this.state.userEmail}
           onUserEmailInput={this.onUserEmailInput}
           emailIsValid={this.state.emailIsValid}
+          changeView={this.changeView}
+          previewAlternative={this.state.previewAlternative}
         />
         <TextBlockContainer
           loading={this.state.loading}
@@ -259,6 +280,7 @@ class App extends React.Component {
           error={this.state.error}
           target={this.state.target}
           translateHighlighted={this.state.translateHighlighted}
+          previewAlternative={this.state.previewAlternative}
         />
       </div>
     );

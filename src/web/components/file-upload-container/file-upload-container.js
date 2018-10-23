@@ -109,7 +109,8 @@ class FileUploadContainer extends React.Component {
           <div
             className={`${
               this.props.className ? this.props.className : ""
-            } error`}>
+            } error`}
+          >
             {this.state.error
               ? this.state.error.message.split("\r\n").map((item, key) => {
                   return (
@@ -132,7 +133,8 @@ class FileUploadContainer extends React.Component {
             acceptClassName="dropzone__accepted"
             rejectClassName="dropzone__rejected"
             disabledClassName="dropzone__disabled"
-            onDrop={this.onDrop}>
+            onDrop={this.onDrop}
+          >
             <span className="dropzone__inner-text">Drop text file here!</span>
             <FileInputContainer
               className="source-text-load"
@@ -170,10 +172,12 @@ class FileUploadContainer extends React.Component {
           <div
             className={`premium-service${
               this.props.premiumSelected ? "" : " closed"
-            }`}>
+            }`}
+          >
             <div className="content-inner">
               <div className="deadline">
                 <span className="deadline-header">Deadline</span>
+
                 <DatePicker
                   className="datepicker"
                   selected={this.props.deadline}
@@ -183,15 +187,22 @@ class FileUploadContainer extends React.Component {
                     !this.props.source.text ||
                     this.props.loading
                   }
+                  startDate={moment()
+                    .add(1, "day")
+                    .endOf("day")}
                   dateFormat="DD.MM.YYYY"
-                  minDate={moment()}
+                  minDate={moment()
+                    .add(1, "day")
+                    .endOf("day")}
                 />
               </div>
               <div className="budget">
-                <span className="budget-header">Budget, EUR</span>
+                <span className="budget-header">
+                  Suggested price, Your email
+                </span>
                 <div className="budget-input">
                   <NumberFormat
-                    value={this.props.budget}
+                    value={this.props.budget.formattedValue}
                     thousandSeparator={true}
                     prefix={"€"}
                     disabled={
@@ -201,9 +212,16 @@ class FileUploadContainer extends React.Component {
                     }
                     onValueChange={this.props.onBudgetChange}
                     decimalScale={2}
-                    isAllowed={({ floatValue }) =>
-                      floatValue >= 0 && floatValue <= 10002000
-                    }
+                    isAllowed={({ floatValue }) => {
+                      console.log({
+                        floatValue,
+                        "this.props.budget.value": this.props.budget.value
+                      });
+                      return (
+                        floatValue >= this.props.budget.value &&
+                        floatValue <= 10002000
+                      );
+                    }}
                     allowNegative={false}
                   />
                 </div>
@@ -247,7 +265,15 @@ class FileUploadContainer extends React.Component {
               onClick={this.props.saveResults}
               disabled={!this.props.target.text || this.props.loading}
               text="save results"
-            />{" "}
+            />
+            <ButtonContainer
+              className={`change-view${
+                this.props.previewAlternative ? " enabled" : ""
+              }`}
+              onClick={this.props.changeView}
+              disabled={!this.props.target.text || this.props.loading}
+              text="change view"
+            />
           </div>
         )}
       </div>

@@ -26,7 +26,7 @@ body {
 .text-block {
   margin: 0 5%;
   padding: 10px 10px;
-  width: 80%;
+  width: 70%;
   display: inline-table;
   position: absolute;
   height: 730px;
@@ -367,4 +367,29 @@ span.dropzone__inner-text {
 }
 .button.send-to-human:hover {
   background: #bfedff;
+}
+.change-view {
+}
+.change-view:hover {
+  background: #bfedff;
+}
+.change-view.enabled {
+}
+
+.alternative-text {
+  color: white;
+  height: auto;
+  font-size: 20px;
+}
+.alternative-text .header {
+  color: blue;
+  text-align: center;
+  padding: 10px;
+  background: rgb(255, 255, 255);
+  border-radius: 5px;
+}
+
+.alternative-text-table {
+  border-spacing: 20px;
+  text-align: justify;
 }
