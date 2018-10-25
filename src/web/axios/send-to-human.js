@@ -1,17 +1,19 @@
-import { TRANSLATE_API_URL } from "../const";
+import { SEND_TO_HUMAN } from "../const";
 import makeApiRequest from "./send-request";
 
-export function translate({ source, target }, onSuccess, onFailure) {
-  makeApiRequest(
-    {
-      text: source.text,
-      // from
-      to: target.language.value
-    },
-    TRANSLATE_API_URL
-  )
+export function send({
+  text,
+  to,
+  budget,
+  deadline,
+  userEmail,
+  onSuccess,
+  onFailure
+}) {
+  makeApiRequest({ text, to, budget, deadline, userEmail }, SEND_TO_HUMAN)
     .then(function(resp) {
-      if (resp && resp.status === 200) {
+      if (resp && resp.status < 300) {
+        console.log(resp);
         onSuccess(resp.data);
       } else {
         onFailure(

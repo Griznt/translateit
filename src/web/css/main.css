@@ -410,3 +410,11 @@ span.dropzone__inner-text {
 .alternative-text-table td {
   width: 50%;
 }
+
+.success-message-wrap {
+}
+.success-message-text {
+  color: white;
+  font-size: 24px;
+  text-align: center;
+}

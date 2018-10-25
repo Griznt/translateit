@@ -244,7 +244,7 @@ class FileUploadContainer extends React.Component {
             </div>
             <ButtonContainer
               className="send-to-human"
-              // onClick={this.props.saveResults}
+              onClick={this.props.sendToHuman}
               disabled={
                 !this.props.source.text ||
                 this.props.loading ||

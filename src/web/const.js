@@ -1,4 +1,6 @@
-export const TRANSLATE_API_URL = "/api/v1/translate";
+const API_URL = "/api/v1/";
+export const TRANSLATE_API_URL = `${API_URL}translate`;
+export const SEND_TO_HUMAN = `${API_URL}send-to-human`;
 export const ACCEPTED_FILE_EXTENSIONS = [".txt", ".md"];
 export const LANGUAGES = {
   EN: "English",

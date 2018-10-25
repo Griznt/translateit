@@ -19,8 +19,7 @@ class TextBlockContainer extends React.Component {
           <div
             className={`source-text${
               this.props.source.collapsed ? " collapsed" : ""
-            }`}
-          >
+            }`}>
             <div className="header" onClick={this.props.toggleSourceText}>
               Source text
             </div>
@@ -34,8 +33,13 @@ class TextBlockContainer extends React.Component {
               })}
             </div>
           </div>
+        ) : this.props.successMessage ? (
+          <div className="success-message-wrap">
+            <span className="success-message-text">
+              {this.props.successMessage}
+            </span>
+          </div>
         ) : null}
-
         {this.props.error ? (
           <div className="translate error">
             {this.props.error.message || this.props.error.toString()}

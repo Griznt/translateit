@@ -1,10 +1,15 @@
+const getSourceLang = require("./src/server/utils");
+
 const axios = require("axios");
 const querystring = require("querystring");
+const orderBy = require("lodash/orderBy");
 
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const SENTENCES_REGEXP = /((?!=|\.).)+(.)/g;
+const EmailSender = require("./src/server/email/email-service");
+const CSV = require("./src/server/csv/csv-service");
 
 const DEEPL_API_URL = "https://api.deepl.com/v2/translate";
 
@@ -12,6 +17,9 @@ require("dotenv").config();
 
 const port = process.env.PORT || 3000;
 const app = express();
+
+const emailSender = new EmailSender();
+const csv = new CSV();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,6 +40,56 @@ app.post("/api/v1/translate", (request, response) => {
     })
       .then(results => {
         response.status(200).send(results);
+      })
+      .catch(error => catchError({ error, response }));
+  } catch (error) {
+    catchError({ error, response });
+  }
+});
+
+app.post("/api/v1/send-to-human", (request, response) => {
+  try {
+    const { text, to, budget, deadline, userEmail } = request.body;
+
+    translateText({
+      textArray: splitTextIntoSentences(text),
+      to
+    })
+      .then(results => {
+        const text = orderBy(results, ["i"], ["asc"]);
+        const jsonArray = [];
+        let [sourceLang] = getSourceLang(
+          text.map(sentence => sentence.sourceLang),
+          to
+        );
+        if (!sourceLang) sourceLang = to;
+        text.forEach(sentence => {
+          const json = {};
+          json[sourceLang] = sentence.source;
+          json[to] = sentence.target;
+          jsonArray.push(json);
+        });
+
+        let csvDocument = csv.saveToCSV(jsonArray);
+
+        const mail = emailSender.getEmailToAdmin({
+          deadline,
+          languages: { from: sourceLang, to },
+          budget,
+          csv: csvDocument,
+          userEmail
+        });
+
+        emailSender
+          .send(mail)
+          .then(res => {
+            console.log("email is sended with res:", res);
+            response.status(201).send("email is sended!");
+          })
+          .catch(err => {
+            console.error("error send Email: %s", err);
+            response.status(500).send(err);
+          });
       })
       .catch(error => catchError({ error, response }));
   } catch (error) {

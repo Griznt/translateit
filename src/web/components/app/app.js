@@ -1,6 +1,7 @@
 import React from "react";
 
 import { translate as translateApi } from "../../axios/translate";
+import { send as sendToHumanApi } from "../../axios/send-to-human";
 import TextBlockContainer from "../text-block/text-block-container";
 import FileUploadContainer from "../file-upload-container/file-upload-container";
 import orderBy from "lodash/orderBy";
@@ -66,6 +67,10 @@ class App extends React.Component {
     this.onUserEmailInput = this.onUserEmailInput.bind(this);
     this.changeView = this.changeView.bind(this);
     this.formatDeadline = this.formatDeadline.bind(this);
+    this.sendToHuman = this.sendToHuman.bind(this);
+    this.onSendToHumanSuccess = this.onSendToHumanSuccess.bind(this);
+    this.setSuccessMessage = this.setSuccessMessage.bind(this);
+    this.clearSuccessMessage = this.clearSuccessMessage.bind(this);
   }
 
   onTextLoaded({ text, filename, extension }) {
@@ -105,6 +110,34 @@ class App extends React.Component {
     );
   }
 
+  setSuccessMessage(text) {
+    this.setState({ successMessage: text });
+    setTimeout(this.clearSuccessMessage, 5000);
+  }
+  clearSuccessMessage() {
+    this.setState({ successMessage: null });
+  }
+
+  onSendToHumanSuccess(text) {
+    this.clearError();
+    this.setSuccessMessage(text);
+    this.setState({
+      loading: false,
+      source: {},
+      target: {},
+      premiumSelected: false,
+      userEmail: "",
+      deadline: moment()
+        .add(1, "day")
+        .startOf("day")
+        .add(17, "hour"),
+      budget: {
+        value: START_PRICE,
+        minValue: START_PRICE
+      }
+    });
+  }
+
   onTranslateSuccess(text) {
     this.clearError();
 
@@ -121,7 +154,7 @@ class App extends React.Component {
       source: {
         ...this.state.source,
         collapsed: true,
-        language: { value: sourceLang, label: LANGUAGES.sourceLang }
+        language: { value: sourceLang, label: LANGUAGES[sourceLang] }
       }
     });
   }
@@ -137,6 +170,26 @@ class App extends React.Component {
         minValue: START_PRICE + ONE_WORD_PRICE * wordsCount
       }
     });
+  }
+
+  sendToHuman() {
+    this.setState({ loading: true });
+    this.clearError();
+    const { budget, deadline, source, target, userEmail } = this.state;
+
+    try {
+      sendToHumanApi({
+        budget: budget.value,
+        deadline: deadline.format("lll"),
+        to: target.language.value,
+        text: source.text,
+        userEmail,
+        onSuccess: this.onSendToHumanSuccess,
+        onFailure: this.setError
+      });
+    } catch (error) {
+      this.setError(error);
+    }
   }
 
   translate() {
@@ -284,6 +337,7 @@ class App extends React.Component {
           changeView={this.changeView}
           previewAlternative={this.state.previewAlternative}
           formatDeadline={this.formatDeadline}
+          sendToHuman={this.sendToHuman}
         />
         <TextBlockContainer
           loading={this.state.loading}
@@ -293,6 +347,8 @@ class App extends React.Component {
           target={this.state.target}
           translateHighlighted={this.state.translateHighlighted}
           previewAlternative={this.state.previewAlternative}
+          successMessage={this.state.successMessage}
+          clearSuccessMessage={this.clearSuccessMessage}
         />
       </div>
     );
