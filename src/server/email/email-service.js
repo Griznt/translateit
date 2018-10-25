@@ -47,7 +47,7 @@ module.exports = class EmailSender {
   getEmailToAdmin({ csv, budget, deadline, languages, userEmail }) {
     const content = new helper.Content(
       "text/html",
-      `<html><body><h3>New incoming translate!</h3><table><tr><td>deadline: ${deadline}</td></tr><tr><td>budget: ${budget}</td></tr><tr><td>from: ${
+      `<html><body><h3>New incoming translate!</h3><table><tr><td>deadline: ${deadline}</td></tr><tr><td>budget: €${budget}</td></tr><tr><td>from: ${
         languages.from
       }</td></tr><tr><td>to: ${
         languages.to
