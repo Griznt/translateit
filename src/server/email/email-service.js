@@ -44,9 +44,9 @@ module.exports = class EmailSender {
       to: process.env.ADMIN_EMAIL,
       to_name: process.env.ADMIN_EMAIL_NAME
     };
-    const subject = `NEW TRANSLATE from ${userEmail} [${languages.from}_${
-      languages.to
-    }] deadline:[${deadline}] €${budget} `;
+    const subject = `New Translation from  CLIENT ${userEmail} ${
+      languages.from
+    } > ${languages.to} DEADLINE ${deadline} FEE EUR ${budget} `;
     const attachment = new helper.Attachment();
 
     const base64File = new Buffer(csv).toString("base64");
