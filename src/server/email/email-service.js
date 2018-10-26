@@ -1,47 +1,34 @@
 const helper = require("sendgrid").mail;
-const sg = require("sendgrid")(
-  "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"
-);
-// (`${process.env.SENDGRID_API_KEY}`);
+const Sendgrid = require("sendgrid");
 
 module.exports = class EmailSender {
   send({ attachment, to, to_name, subject, content, userEmail }) {
-    return new Promise((resolve, reject) => {
-      const mail = new helper.Mail();
-      let email = new helper.Email(
-        process.env.SITE_EMAIL,
-        process.env.SITE_EMAIL_NAME
-      );
-      mail.setFrom(email);
+    // return new Promise((resolve, reject) => {
+    const mail = new helper.Mail();
+    let email = new helper.Email(
+      process.env.SITE_EMAIL,
+      process.env.SITE_EMAIL_NAME
+    );
+    mail.setFrom(email);
 
-      mail.setSubject(subject);
+    mail.setSubject(subject);
 
-      const personalization = new helper.Personalization();
-      email = new helper.Email(to, to_name ? to_name : to);
-      personalization.addTo(email);
-      mail.addPersonalization(personalization);
+    const personalization = new helper.Personalization();
+    email = new helper.Email(to, to_name ? to_name : to);
+    personalization.addTo(email);
+    mail.addPersonalization(personalization);
 
-      mail.addContent(content);
-      if (attachment) mail.addAttachment(attachment);
-
-      var request = sg.emptyRequest({
-        method: "POST",
-        path: "/v3/mail/send",
-        body: mail.toJSON()
-      });
-
-      sg.API(request, function(err, response) {
-        if (err) reject(err);
-        if (response.statusCode > 300) reject(response.body);
-
-        console.log(response.statusCode);
-        console.log(response.body);
-        console.log(response.headers);
-        resolve(response.body);
-      });
-
-      console.log("email is sending...");
+    mail.addContent(content);
+    if (attachment) mail.addAttachment(attachment);
+    const sendgrid = new Sendgrid(process.env.SENDGRID_API_KEY);
+    var request = sendgrid.emptyRequest({
+      method: "POST",
+      path: "/v3/mail/send",
+      body: mail.toJSON()
     });
+
+    console.log("email is sending...");
+    return sendgrid.API(request);
   }
 
   getEmailToAdmin({ csv, budget, deadline, languages, userEmail }) {
@@ -51,7 +38,7 @@ module.exports = class EmailSender {
         languages.from
       }</td></tr><tr><td>to: ${
         languages.to
-      }</td></tr><tr><td>user email: < a href="mailto:${userEmail}">${userEmail}</a></td></tr></table></body></html>`
+      }</td></tr><tr><td>user email: <a href="mailto:${userEmail}">${userEmail}</a></td></tr></table></body></html>`
     );
     const to = {
       to: process.env.ADMIN_EMAIL,

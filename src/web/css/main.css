@@ -404,6 +404,7 @@ span.dropzone__inner-text {
 }
 
 .alternative-text-table {
+  width: 100%;
   border-spacing: 20px;
   text-align: justify;
 }
@@ -412,6 +413,7 @@ span.dropzone__inner-text {
 }
 
 .success-message-wrap {
+  margin: 10%;
 }
 .success-message-text {
   color: white;

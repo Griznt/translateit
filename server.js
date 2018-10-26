@@ -1,3 +1,7 @@
+const { requiredEnvs } = require("./src/server/const");
+const intersection = require("lodash/intersection");
+const difference = require("lodash/difference");
+
 const getSourceLang = require("./src/server/utils");
 
 const axios = require("axios");
@@ -14,6 +18,8 @@ const CSV = require("./src/server/csv/csv-service");
 const DEEPL_API_URL = "https://api.deepl.com/v2/translate";
 
 require("dotenv").config();
+
+checkEnvVariables();
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -83,11 +89,11 @@ app.post("/api/v1/send-to-human", (request, response) => {
         emailSender
           .send(mail)
           .then(res => {
-            console.log("email is sended with res:", res);
+            console.log("email is sended!");
             response.status(201).send("email is sended!");
           })
           .catch(err => {
-            console.error("error send Email: %s", err);
+            console.error("error send Email", err);
             response.status(500).send(err);
           });
       })
@@ -169,4 +175,18 @@ function calculateWordsCount(sentence) {
 
 function splitTextIntoSentences(text) {
   return text.match(SENTENCES_REGEXP);
+}
+
+function checkEnvVariables() {
+  const intersectionOfArrays = intersection(
+    requiredEnvs,
+    Object.keys(process.env)
+  );
+  if (intersectionOfArrays.length < requiredEnvs.length) {
+    console.error(
+      "THIS REQUIRED ENV VARIABLES ARE NOT SPECIFIED:",
+      difference(requiredEnvs, intersectionOfArrays)
+    );
+    process.exit(1);
+  }
 }

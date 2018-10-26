@@ -13,7 +13,6 @@ export function send({
   makeApiRequest({ text, to, budget, deadline, userEmail }, SEND_TO_HUMAN)
     .then(function(resp) {
       if (resp && resp.status < 300) {
-        console.log(resp);
         onSuccess(resp.data);
       } else {
         onFailure(
