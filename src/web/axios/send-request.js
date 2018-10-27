@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default function makeApiRequest(data, apiUrl) {
+export default function makeApiRequest(data = {}, apiUrl, METHOD) {
   let url = "";
   if (process.env.NODE_ENV === "development") {
     const [host] = window.location.host.split(":") || [];
@@ -9,7 +9,7 @@ export default function makeApiRequest(data, apiUrl) {
     }://${host}:${process.env.HTTP || "3000"}${apiUrl}`;
   } else url = apiUrl;
 
-  return axios.post(url, {
+  return axios[METHOD || "post"](url, {
     ...data,
     dataType: "json",
     headers: {

@@ -1,20 +1,8 @@
-import { SEND_TO_HUMAN_API_URL } from "../const";
+import { APP_CONFIG_API_URL } from "../const";
 import makeApiRequest from "./send-request";
 
-export function send({
-  text,
-  to,
-  budget,
-  deadline,
-  userEmail,
-  filename,
-  onSuccess,
-  onFailure
-}) {
-  makeApiRequest(
-    { text, to, budget, deadline, userEmail, filename },
-    SEND_TO_HUMAN_API_URL
-  )
+export function loadEnv({ onSuccess, onFailure }) {
+  makeApiRequest(null, APP_CONFIG_API_URL, "get")
     .then(function(resp) {
       if (resp && resp.status < 300) {
         onSuccess(resp.data);

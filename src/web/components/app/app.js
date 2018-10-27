@@ -15,6 +15,7 @@ import {
   EMAIL_REGEXP,
   START_PRICE
 } from "../../const";
+import { loadEnv } from "../../axios/load-env";
 
 class App extends React.Component {
   constructor(props) {
@@ -71,6 +72,18 @@ class App extends React.Component {
     this.onSendToHumanSuccess = this.onSendToHumanSuccess.bind(this);
     this.setSuccessMessage = this.setSuccessMessage.bind(this);
     this.clearSuccessMessage = this.clearSuccessMessage.bind(this);
+    this.getStartPrice = this.getStartPrice.bind(this);
+    this.getOneWordPrice = this.getOneWordPrice.bind(this);
+  }
+
+  componentDidMount() {
+    const onSuccess = config => {
+        console.log("from /app... recieved", config);
+        this.setState({ ...config });
+        this.billWordsCount();
+      },
+      onFailure = err => console.error("unable to load envs:", err);
+    loadEnv({ onSuccess, onFailure });
   }
 
   onTextLoaded({ text, filename, extension }) {
@@ -163,11 +176,21 @@ class App extends React.Component {
     this.setState({ previewAlternative: !this.state.previewAlternative });
   }
 
+  getStartPrice() {
+    return +this.state.START_PRICE || START_PRICE;
+  }
+
+  getOneWordPrice() {
+    return +this.state.ONE_WORD_PRICE || ONE_WORD_PRICE;
+  }
+
   billWordsCount(wordsCount) {
     this.setState({
       budget: {
-        value: START_PRICE + ONE_WORD_PRICE * wordsCount,
-        minValue: START_PRICE + ONE_WORD_PRICE * wordsCount
+        value:
+          this.getStartPrice() + this.getOneWordPrice() * (wordsCount || 0),
+        minValue:
+          this.getStartPrice() + this.getOneWordPrice() * (wordsCount || 0)
       }
     });
   }

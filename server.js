@@ -53,6 +53,13 @@ app.post("/api/v1/translate", (request, response) => {
   }
 });
 
+app.get("/app", (request, response) => {
+  response.status(200).json({
+    START_PRICE: process.env.START_PRICE,
+    ONE_WORD_PRICE: process.env.ONE_WORD_PRICE
+  });
+});
+
 app.post("/api/v1/send-to-human", (request, response) => {
   try {
     const { text, to, budget, deadline, userEmail, filename } = request.body;
