@@ -7,7 +7,7 @@ module.exports = class CSV {
       const parser = new Parser({ fields });
       const csvFile = parser.parse(arrayofObjects);
 
-      return csvFile;
+      return `\uFEFF${csvFile}`;
     } catch (err) {
       console.error(err);
       return null;

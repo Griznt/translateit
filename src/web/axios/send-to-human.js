@@ -7,10 +7,14 @@ export function send({
   budget,
   deadline,
   userEmail,
+  filename,
   onSuccess,
   onFailure
 }) {
-  makeApiRequest({ text, to, budget, deadline, userEmail }, SEND_TO_HUMAN)
+  makeApiRequest(
+    { text, to, budget, deadline, userEmail, filename },
+    SEND_TO_HUMAN
+  )
     .then(function(resp) {
       if (resp && resp.status < 300) {
         onSuccess(resp.data);

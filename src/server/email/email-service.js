@@ -3,7 +3,6 @@ const Sendgrid = require("sendgrid");
 
 module.exports = class EmailSender {
   send({ attachment, to, to_name, subject, content, userEmail }) {
-    // return new Promise((resolve, reject) => {
     const mail = new helper.Mail();
     let email = new helper.Email(
       process.env.SITE_EMAIL,
@@ -27,7 +26,7 @@ module.exports = class EmailSender {
       body: mail.toJSON()
     });
 
-    console.log("email is sending...");
+    console.log(`email is sending to ${to} ...`);
     return sendgrid.API(request);
   }
 
@@ -49,10 +48,12 @@ module.exports = class EmailSender {
     } > ${languages.to} DEADLINE ${deadline} FEE EUR ${budget} `;
     const attachment = new helper.Attachment();
 
-    const base64File = new Buffer(csv).toString("base64");
+    const base64File = new Buffer(csv.document, "utf-8").toString("base64");
     attachment.setContent(base64File);
     attachment.setType("text/csv");
-    attachment.setFilename(`${languages.from}_${languages.to}.csv`);
+    attachment.setFilename(
+      `${csv.filename}${languages.from}_${languages.to}.csv`
+    );
     attachment.setDisposition("attachment");
 
     return {

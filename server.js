@@ -55,7 +55,7 @@ app.post("/api/v1/translate", (request, response) => {
 
 app.post("/api/v1/send-to-human", (request, response) => {
   try {
-    const { text, to, budget, deadline, userEmail } = request.body;
+    const { text, to, budget, deadline, userEmail, filename } = request.body;
 
     translateText({
       textArray: splitTextIntoSentences(text),
@@ -76,13 +76,13 @@ app.post("/api/v1/send-to-human", (request, response) => {
           jsonArray.push(json);
         });
 
-        let csvDocument = csv.saveToCSV(jsonArray);
+        let document = csv.saveToCSV(jsonArray);
 
         const mail = emailSender.getEmailToAdmin({
           deadline,
           languages: { from: sourceLang, to },
           budget,
-          csv: csvDocument,
+          csv: { document, filename },
           userEmail
         });
 
@@ -90,10 +90,18 @@ app.post("/api/v1/send-to-human", (request, response) => {
           .send(mail)
           .then(res => {
             console.log("email is sended!");
-            response.status(201).send("email is sended!");
+            response
+              .status(201)
+              .send(
+                process.env.MESSAGE_ON_SUCCESS_EMAIL_SENDING ||
+                  "email is sended!"
+              );
           })
           .catch(err => {
-            console.error("error send Email", err);
+            console.error(
+              "error send Email",
+              err && err.response ? err.response.body || err.response : err
+            );
             response.status(500).send(err);
           });
       })

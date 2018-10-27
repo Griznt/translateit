@@ -173,41 +173,60 @@ class App extends React.Component {
   }
 
   sendToHuman() {
-    this.setState({ loading: true });
-    this.clearError();
-    const { budget, deadline, source, target, userEmail } = this.state;
+    if (
+      !(
+        this.state.budget &&
+        this.state.deadline &&
+        this.state.emailIsValid &&
+        this.state.target.language &&
+        this.state.source.text
+      )
+    ) {
+      this.setError("Some of fields are not specified...");
+      setTimeout(this.clearError, 1000);
+    } else {
+      this.setState({ loading: true });
+      this.clearError();
+      const { budget, deadline, source, target, userEmail } = this.state;
 
-    try {
-      sendToHumanApi({
-        budget: budget.value,
-        deadline: deadline.format("lll"),
-        to: target.language.value,
-        text: source.text,
-        userEmail,
-        onSuccess: this.onSendToHumanSuccess,
-        onFailure: this.setError
-      });
-    } catch (error) {
-      this.setError(error);
+      try {
+        sendToHumanApi({
+          budget: budget.value,
+          deadline: deadline.format("lll"),
+          to: target.language.value,
+          text: source.text,
+          filename: source.filename,
+          userEmail,
+          onSuccess: this.onSendToHumanSuccess,
+          onFailure: this.setError
+        });
+      } catch (error) {
+        this.setError(error);
+      }
     }
   }
 
   translate() {
-    this.setState({ loading: true });
-    this.clearError();
-    const { source, target } = this.state;
+    if (!(this.state.target.language && this.state.source.text)) {
+      this.setError("Some of fields are not specified...");
+      setTimeout(this.clearError, 1000);
+    } else {
+      this.setState({ loading: true });
+      this.clearError();
+      const { source, target } = this.state;
 
-    try {
-      translateApi(
-        {
-          source,
-          target
-        },
-        this.onTranslateSuccess,
-        this.setError
-      );
-    } catch (error) {
-      this.setError(error);
+      try {
+        translateApi(
+          {
+            source,
+            target
+          },
+          this.onTranslateSuccess,
+          this.setError
+        );
+      } catch (error) {
+        this.setError(error);
+      }
     }
   }
 
@@ -307,7 +326,10 @@ class App extends React.Component {
       console.error(err);
     }
 
-    this.downloadCsv(csvDocument, `${from}_to_${to}`);
+    this.downloadCsv(
+      csvDocument,
+      `${this.state.source.filename}${from}_to_${to}`
+    );
   }
 
   render() {
@@ -338,6 +360,7 @@ class App extends React.Component {
           previewAlternative={this.state.previewAlternative}
           formatDeadline={this.formatDeadline}
           sendToHuman={this.sendToHuman}
+          languageValue={this.state.target.language}
         />
         <TextBlockContainer
           loading={this.state.loading}

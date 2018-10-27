@@ -148,6 +148,7 @@ class FileUploadContainer extends React.Component {
         <SelectContainer
           options={this.props.languages}
           className="language"
+          value={this.props.languageValue}
           settings={{
             placeholder: "target language",
             isSearchable: true,
@@ -181,6 +182,7 @@ class FileUploadContainer extends React.Component {
                   disabled={
                     !this.props.premiumSelected ||
                     !this.props.source.text ||
+                    !this.props.target.language ||
                     this.props.loading
                   }
                   startDate={moment()
@@ -210,6 +212,7 @@ class FileUploadContainer extends React.Component {
                     className={`budget-input span${
                       !this.props.premiumSelected ||
                       !this.props.source.text ||
+                      !this.props.target.language ||
                       this.props.loading
                         ? " disabled"
                         : ""
@@ -234,6 +237,7 @@ class FileUploadContainer extends React.Component {
                 disabled={
                   !this.props.premiumSelected ||
                   !this.props.source.text ||
+                  !this.props.target.language ||
                   this.props.loading
                 }
                 invalid={!this.props.emailIsValid}
