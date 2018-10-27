@@ -78,7 +78,6 @@ class App extends React.Component {
 
   componentDidMount() {
     const onSuccess = config => {
-        console.log("from /app... recieved", config);
         this.setState({ ...config });
         this.billWordsCount();
       },
