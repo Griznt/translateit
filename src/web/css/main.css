@@ -1,0 +1,370 @@
+@font-face {
+  font-family: "Roboto";
+  src: ("https://fonts.googleapis.com/css?family=Roboto");
+}
+body {
+  background: steelblue;
+}
+.app {
+  background: steelblue;
+  height: 800px;
+  font-family: "Roboto";
+  font-weight: 500;
+  line-height: 1.1;
+  color: gray;
+}
+.logo-text {
+  font-size: 40px;
+  color: white;
+  display: flex;
+  margin-left: 25%;
+}
+.sidebar-left {
+  width: 200px;
+  display: inline-block;
+}
+.text-block {
+  margin: 0 5%;
+  padding: 10px 10px;
+  width: 80%;
+  display: inline-table;
+  position: absolute;
+  height: 730px;
+}
+.select {
+  width: 200px;
+  padding: 10px;
+}
+.button {
+  color: gray;
+  border-radius: 5px;
+  margin: 10px;
+  font-family: "Roboto";
+  font-size: 16px;
+}
+button {
+  display: inline-block;
+  border: none;
+  padding: 10px;
+  height: 37px;
+  width: 200px;
+  margin: 0;
+  text-decoration: none;
+  background: #ffffff;
+  color: steelblue;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  transition: background 250ms ease-in-out, transform 150ms ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+button:hover button:focus {
+  background: #bfedff;
+}
+
+button:focus {
+  outline: 1px solid rgb(235, 235, 235);
+  outline-offset: -2px;
+}
+
+button:active {
+  transform: scale(0.99);
+}
+button:disabled {
+  background: rgb(204, 204, 204);
+  cursor: not-allowed;
+}
+div.language__control--is-disabled {
+  background: rgb(204, 204, 204);
+  cursor: not-allowed;
+}
+div.language__control--is-disabled:hover {
+  background: rgb(204, 204, 204);
+  cursor: not-allowed;
+}
+div.language__control:hover {
+  background: #bfedff;
+  cursor: pointer;
+}
+.source-text-load.error {
+  text-align: center;
+}
+.file-upload {
+  position: relative;
+  display: inline-block;
+}
+.file-upload__label:hover {
+  cursor: pointer;
+  background: #bfedff;
+}
+
+.file-upload__label {
+  display: block;
+  padding: 10px;
+  width: 180px;
+  text-align: center;
+  margin: 10px;
+  color: steelblue;
+  background: rgb(255, 255, 255);
+  border-radius: 0.4em;
+  transition: background 0.3s;
+  white-space: nowrap;
+}
+.file-upload__input {
+  color: white;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 16px;
+  width: 200px;
+  margin: 10px 10px;
+  height: 37px;
+  opacity: 0;
+}
+.premium-switcher {
+  color: white;
+  padding: 0 10px;
+  display: flex;
+  cursor: pointer;
+  width: 200px;
+}
+.checkbox input[type="checkbox"] {
+  display: none;
+}
+.checkbox input[type="checkbox"] + span {
+  display: inline-block;
+  position: relative;
+  top: -1px;
+  width: 12px;
+  height: 12px;
+  margin: -1px 0px 0 0;
+  vertical-align: middle;
+  background: white left top no-repeat;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+.checkbox input[type="checkbox"]:checked + span {
+  background: #87f7ff -19px top no-repeat;
+}
+.checkbox input[type="checkbox"] + span {
+  margin-right: 4px;
+}
+.premium-switcher .label {
+  font-size: 16px;
+  width: 80%;
+}
+.loader {
+  position: fixed;
+  z-index: 999999;
+  width: 100%;
+  height: 100%;
+}
+.source-text {
+  height: auto;
+  max-height: 45%;
+  color: white;
+  font-size: 20px;
+  border: solid 1px;
+  border-radius: 5px;
+  text-align: center;
+  padding: 0 0 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 85%;
+}
+.source-text .header {
+  text-decoration: underline;
+  cursor: pointer;
+  background: white;
+  color: steelblue;
+  width: 83.5%;
+  border-radius: 5px;
+  margin: 0 0 10px;
+  position: absolute;
+}
+.source-text.collapsed {
+  height: 0px;
+  overflow: hidden;
+}
+.source-text .content {
+  max-height: 50%;
+  padding: 0 10px;
+  margin-top: 30px;
+}
+.target-text {
+  height: auto;
+  max-height: 700px;
+  color: white;
+  font-size: 20px;
+  border: solid 1px;
+  border-radius: 5px;
+  text-align: center;
+  padding: 0 0 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 85%;
+}
+.target-text .header {
+  text-decoration: underline;
+  background: white;
+  color: steelblue;
+  width: 83.5%;
+  border-radius: 5px;
+  position: absolute;
+}
+.target-text .sentence {
+  padding: 0 10px;
+}
+.target-text .content {
+  max-height: 370px;
+  padding: 0 10px;
+  margin-top: 30px;
+}
+.target-text.extended {
+  height: 700px;
+}
+.target-text .content.extended {
+  height: 700px;
+  max-height: 700px;
+}
+.target-text .content .sentence {
+  margin-top: 10px;
+}
+.target-text .content .sentence .target::before {
+  margin-top: 10px;
+  content: "\A";
+  white-space: pre;
+}
+.target-text .content .sentence .target.highlighted {
+  background: white;
+  color: steelblue;
+}
+.error {
+  color: rgb(255, 77, 77);
+}
+.translate.error {
+  margin: 20px;
+}
+.upload-file-zone .error {
+  margin: 10px;
+  height: 17px;
+  font-size: 14px;
+  text-align: center;
+}
+.dropzone {
+  width: 220px;
+  height: 57px;
+}
+.dropzone__active {
+  position: relative;
+  border-width: 4px;
+  border-color: rgb(255, 255, 255);
+  border-style: dashed;
+  border-radius: 5px;
+  margin: 2px;
+  width: 210px;
+  height: 47px;
+}
+span.dropzone__inner-text {
+  position: absolute;
+  margin: 8% 20%;
+  color: white;
+  font-size: 14px;
+}
+.dropzone.dropzone__active .file-upload {
+  opacity: 0;
+}
+
+.budget {
+  width: 200px;
+  padding: 0 10px;
+  margin-top: 10px;
+}
+.budget-input input {
+  font-family: "Roboto";
+  font-size: 16px;
+  padding: 10px 0;
+  width: 180px;
+  border-radius: 5px;
+  border: none;
+  text-align: right;
+  margin-top: 10px;
+  padding-right: 20px;
+}
+.budget-input input:disabled {
+  background: rgb(204, 204, 204);
+  cursor: not-allowed;
+}
+.budget-header {
+  color: white;
+}
+.deadline {
+  margin-top: 10px;
+  width: 180px;
+  padding: 0 10px;
+}
+.deadline-header {
+  color: white;
+}
+.datepicker {
+  font-family: "Roboto";
+  font-size: 16px;
+  padding: 10px 0;
+  border-radius: 5px;
+  border: none;
+  width: 180px;
+  text-align: right;
+  margin-right: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.react-datepicker__input-container input {
+  padding-right: 20px;
+}
+.react-datepicker__input-container input:disabled {
+  background: rgb(204, 204, 204);
+  cursor: not-allowed;
+}
+
+.premium-service.closed {
+  display: none;
+  overflow: hidden;
+  transition: display 0.55s ease-in-out;
+}
+.premium-service {
+  transition: max-height 0.55s ease-in;
+}
+.email-input {
+  margin: 0 10px;
+}
+.email-input input {
+  font-family: "Roboto";
+  font-size: 16px;
+  padding: 10px 0;
+  width: 180px;
+  border-radius: 5px;
+  border: none;
+  text-align: right;
+  margin-top: 10px;
+  padding-right: 20px;
+}
+.email-input input:disabled {
+  background: rgb(204, 204, 204);
+  cursor: not-allowed;
+}
+.react-datepicker__input-container input:hover,
+.budget-input input:hover,
+.email-input input:hover {
+  background: #bfedff;
+}
+.email-input input.invalid {
+  color: rgb(216, 66, 66);
+  /* background: rgb(250, 201, 201); */
+}
+.button.send-to-human:hover {
+  background: #bfedff;
+}

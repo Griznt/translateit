@@ -1,0 +1,8 @@
+{
+  "files.autoSave": "onFocusChange",
+  "eslint._legacyModuleResolve": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.autoFixOnSave": true,
+  "prettier.eslintIntegration": true,
+  "eslint.enable": true
+}
